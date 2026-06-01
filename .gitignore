@@ -24,3 +24,5 @@
 !/bootstrap/cache/.gitignore
 database/database.sqlite
 database/*.sqlite
+
+.phpunit.cache/
