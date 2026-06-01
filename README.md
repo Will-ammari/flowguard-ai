@@ -2,6 +2,8 @@
 
 FlowGuard AI is a Laravel 8 / PHP 7.4 engineering MVP for mapping AI-powered automation workflows, detecting operational and technical risk points, scoring findings, and generating structured reports.
 
+Built originally with Laravel 8 / PHP 7.4 as an MVP. Upgrade to PHP 8.2 / Laravel 11 is planned.
+
 The project is designed as a portfolio-grade backend engineering product. It demonstrates MVC architecture, service-layer design, deterministic domain rules, workflow modeling, risk scoring, data-flow reasoning, and report generation.
 
 ## Problem
@@ -89,3 +91,4 @@ Eloquent Models
       |
       v
 MySQL Database
+
