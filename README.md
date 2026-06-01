@@ -146,3 +146,28 @@ FlowGuard AI is designed as a backend-focused portfolio project for AI workflow 
 - Customer-facing AI decisions
 
 The project is not intended to replace legal compliance reviews. It demonstrates backend engineering practices for building traceable and reviewable AI-enabled workflow systems.
+
+
+
+
+## Screenshots
+
+### About / Product Overview
+
+![About FlowGuard AI](docs/screenshots/01-about-flowguard-ai.png)
+
+### Risk Methodology and Data Model
+
+![Risk Methodology and Data Model](docs/screenshots/02-risk-methodology-and-data-model.png)
+
+### Portfolio Case Study
+
+![Portfolio Case Study](docs/screenshots/03-portfolio-case-study.png)
+
+### Workflow Risk Findings
+
+![Workflow Risk Findings](docs/screenshots/04-workflow-risk-findings.png)
+
+### Data Flow View
+
+![Data Flow View](docs/screenshots/05-data-flow-view.png)
