@@ -1,5 +1,7 @@
 # FlowGuard AI
 
+![Laravel Tests](https://github.com/Will-ammari/flowguard-ai/actions/workflows/laravel-tests.yml/badge.svg)
+
 FlowGuard AI is a Laravel 11 / PHP 8.2 engineering MVP for mapping AI-powered automation workflows, detecting operational and technical risk points, scoring findings, and generating structured reports.
 
 The project is designed as a portfolio-grade backend engineering product. It demonstrates MVC architecture, service-layer design, deterministic domain rules, workflow modeling, risk scoring, audit logging, data-flow reasoning, and report generation.
