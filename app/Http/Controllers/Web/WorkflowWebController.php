@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Models\Workflow;
+use App\Services\Audit\AuditLogger;
 use Illuminate\Http\Request;
 
 class WorkflowWebController extends Controller
@@ -24,11 +25,15 @@ class WorkflowWebController extends Controller
         return view('workflows.create');
     }
 
-    public function store(Request $request)
+    public function store(Request $request, AuditLogger $auditLogger)
     {
         $validated = $this->validateWorkflow($request);
 
         $workflow = Workflow::create($validated);
+
+        $auditLogger->created($workflow, $workflow, $request, [
+            'source' => 'web',
+        ]);
 
         return redirect()
             ->route('workflows.show', $workflow)
@@ -60,19 +65,35 @@ class WorkflowWebController extends Controller
         ]);
     }
 
-    public function update(Request $request, Workflow $workflow)
+    public function update(Request $request, Workflow $workflow, AuditLogger $auditLogger)
     {
         $validated = $this->validateWorkflow($request);
 
+        $oldValues = $workflow->only([
+            'title',
+            'industry',
+            'owner_name',
+            'description',
+            'business_context',
+        ]);
+
         $workflow->update($validated);
+
+        $auditLogger->updated($workflow, $oldValues, $workflow, $request, [
+            'source' => 'web',
+        ]);
 
         return redirect()
             ->route('workflows.show', $workflow)
             ->with('success', 'Workflow updated successfully.');
     }
 
-    public function destroy(Workflow $workflow)
+    public function destroy(Request $request, Workflow $workflow, AuditLogger $auditLogger)
     {
+        $auditLogger->deleted($workflow, $workflow, $request, [
+            'source' => 'web',
+        ]);
+
         $workflow->delete();
 
         return redirect()

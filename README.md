@@ -91,4 +91,58 @@ Eloquent Models
       |
       v
 MySQL Database
+```
 
+## Quick Start with Docker
+
+FlowGuard AI can be started locally using Docker and MySQL.
+
+```bash
+cp .env.example .env
+docker compose up --build
+```
+
+The application will be available at:
+
+```text
+http://localhost:8000
+```
+
+The API is available under:
+
+```text
+http://localhost:8000/api/v1
+```
+
+Run the test suite:
+
+```bash
+docker compose exec app php artisan test
+```
+
+## Backend Engineering Highlights
+
+- Laravel-based MVC architecture
+- REST API for workflows, workflow steps, risk findings, reports, and audit logs
+- Service-layer risk analysis using deterministic domain rules
+- Form Request validation
+- API Resources for response transformation
+- Audit logging for workflow creation, updates, deletion, and analysis
+- Database migrations, seeders, and demo workflow builder
+- Feature tests for workflow APIs, risk analysis, and audit logs
+- Docker-based local development setup
+
+## Compliance-Aware Features
+
+FlowGuard AI is designed as a backend-focused portfolio project for AI workflow risk assessment. It helps document and analyze AI-assisted business workflows by identifying:
+
+- Personal data usage
+- Sensitive data exposure
+- External API sharing
+- Missing human review
+- Missing audit trail
+- Missing fallback path
+- Irreversible automated actions
+- Customer-facing AI decisions
+
+The project is not intended to replace legal compliance reviews. It demonstrates backend engineering practices for building traceable and reviewable AI-enabled workflow systems.

@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\StepType;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreWorkflowRequest extends FormRequest
 {
@@ -19,10 +21,11 @@ class StoreWorkflowRequest extends FormRequest
             'industry' => ['nullable', 'string', 'max:120'],
             'owner_name' => ['nullable', 'string', 'max:120'],
             'business_context' => ['nullable', 'string'],
+
             'steps' => ['sometimes', 'array'],
             'steps.*.step_order' => ['required_with:steps', 'integer', 'min:1'],
             'steps.*.name' => ['required_with:steps', 'string', 'max:160'],
-            'steps.*.step_type' => ['required_with:steps', 'string'],
+            'steps.*.step_type' => ['required_with:steps', 'string', Rule::in(StepType::values())],
             'steps.*.description' => ['nullable', 'string'],
             'steps.*.input_data' => ['nullable', 'array'],
             'steps.*.output_data' => ['nullable', 'array'],

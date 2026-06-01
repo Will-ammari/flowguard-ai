@@ -6,6 +6,7 @@ use App\Enums\StepType;
 use App\Http\Controllers\Controller;
 use App\Models\Workflow;
 use App\Models\WorkflowStep;
+use App\Services\Audit\AuditLogger;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -22,11 +23,15 @@ class WorkflowStepWebController extends Controller
         ]);
     }
 
-    public function store(Request $request, Workflow $workflow)
+    public function store(Request $request, Workflow $workflow, AuditLogger $auditLogger)
     {
         $validated = $this->validateStep($request, $workflow);
 
-        $workflow->steps()->create($this->buildStepPayload($validated, $request));
+        $workflowStep = $workflow->steps()->create($this->buildStepPayload($validated, $request));
+
+        $auditLogger->created($workflowStep, $workflow, $request, [
+            'source' => 'web',
+        ]);
 
         $this->clearAnalysisResults($workflow);
 
@@ -46,13 +51,37 @@ class WorkflowStepWebController extends Controller
         ]);
     }
 
-    public function update(Request $request, Workflow $workflow, WorkflowStep $workflowStep)
+    public function update(Request $request, Workflow $workflow, WorkflowStep $workflowStep, AuditLogger $auditLogger)
     {
         $this->ensureStepBelongsToWorkflow($workflow, $workflowStep);
 
         $validated = $this->validateStep($request, $workflow, $workflowStep);
 
+        $oldValues = $workflowStep->only([
+            'step_order',
+            'name',
+            'step_type',
+            'description',
+            'input_data',
+            'output_data',
+            'systems_involved',
+            'uses_ai',
+            'uses_personal_data',
+            'has_human_review',
+            'is_customer_facing',
+            'uses_external_api',
+            'stores_data',
+            'uses_sensitive_data',
+            'has_audit_log',
+            'has_fallback_path',
+            'is_irreversible_action',
+        ]);
+
         $workflowStep->update($this->buildStepPayload($validated, $request));
+
+        $auditLogger->updated($workflowStep, $oldValues, $workflow, $request, [
+            'source' => 'web',
+        ]);
 
         $this->clearAnalysisResults($workflow);
 
@@ -61,9 +90,13 @@ class WorkflowStepWebController extends Controller
             ->with('success', 'Workflow step updated successfully. Run analysis again to refresh findings.');
     }
 
-    public function destroy(Workflow $workflow, WorkflowStep $workflowStep)
+    public function destroy(Request $request, Workflow $workflow, WorkflowStep $workflowStep, AuditLogger $auditLogger)
     {
         $this->ensureStepBelongsToWorkflow($workflow, $workflowStep);
+
+        $auditLogger->deleted($workflowStep, $workflow, $request, [
+            'source' => 'web',
+        ]);
 
         $workflowStep->delete();
 

@@ -32,4 +32,9 @@ class Workflow extends Model
     {
         return $this->hasMany(AnalysisReport::class);
     }
+
+    public function auditLogs(): HasMany
+    {
+        return $this->hasMany(AuditLog::class)->latest();
+    }
 }

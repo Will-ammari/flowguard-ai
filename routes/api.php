@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\RiskAnalysisController;
+use App\Http\Controllers\Api\WorkflowAuditLogController;
 use App\Http\Controllers\Api\WorkflowController;
 use App\Http\Controllers\Api\WorkflowStepController;
 use Illuminate\Support\Facades\Route;
@@ -22,4 +23,7 @@ Route::prefix('v1')->name('api.')->group(function (): void {
 
     Route::get('workflows/{workflow}/findings', [RiskAnalysisController::class, 'findings'])
         ->name('workflows.findings');
+
+    Route::get('workflows/{workflow}/audit-logs', [WorkflowAuditLogController::class, 'index'])
+        ->name('workflows.audit-logs.index');
 });
