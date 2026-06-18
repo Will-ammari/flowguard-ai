@@ -1,7 +1,7 @@
 {
     "name": "william-ammari/flowguard-ai",
     "type": "project",
-    "description": "FlowGuard AI - AI workflow risk mapping MVP built with Laravel 8 and PHP 7.4.",
+    "description": "FlowGuard AI - AI workflow risk mapping MVP built with Laravel 11 and PHP 8.2.",
     "keywords": [
         "laravel",
         "ai",
