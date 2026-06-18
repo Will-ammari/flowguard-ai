@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Enums\StepType;
 use App\Models\Workflow;
+use App\Models\WorkflowStep;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -57,6 +58,7 @@ class WorkflowApiTest extends TestCase
         ]);
 
         $this->assertDatabaseCount('workflow_steps', 2);
+
         $this->assertDatabaseHas('audit_logs', [
             'action' => 'created',
             'entity_type' => Workflow::class,
@@ -94,6 +96,52 @@ class WorkflowApiTest extends TestCase
         $this->assertDatabaseHas('audit_logs', [
             'workflow_id' => $workflow->id,
             'action' => 'updated',
+            'entity_type' => Workflow::class,
+            'entity_id' => $workflow->id,
+        ]);
+    }
+
+    public function test_it_can_delete_a_workflow(): void
+    {
+        $workflow = Workflow::create([
+            'title' => 'Workflow to delete',
+            'description' => 'This workflow should be deleted through the API.',
+            'industry' => 'E-commerce',
+            'owner_name' => 'Operations Team',
+            'business_context' => 'Testing workflow deletion and cascading step cleanup.',
+        ]);
+
+        $step = WorkflowStep::create([
+            'workflow_id' => $workflow->id,
+            'step_order' => 1,
+            'name' => 'AI sends account update',
+            'step_type' => StepType::AI_PROCESSING,
+            'description' => 'AI performs a risky account update.',
+            'input_data' => ['account_id', 'customer_message'],
+            'output_data' => ['account_update'],
+            'systems_involved' => ['CRM', 'LLM Provider'],
+            'uses_ai' => true,
+            'uses_personal_data' => true,
+            'uses_external_api' => true,
+            'has_human_review' => false,
+            'has_audit_log' => false,
+            'has_fallback_path' => false,
+        ]);
+
+        $response = $this->deleteJson("/api/v1/workflows/{$workflow->id}");
+
+        $response->assertSuccessful();
+
+        $this->assertDatabaseMissing('workflows', [
+            'id' => $workflow->id,
+        ]);
+
+        $this->assertDatabaseMissing('workflow_steps', [
+            'id' => $step->id,
+        ]);
+
+        $this->assertDatabaseHas('audit_logs', [
+            'action' => 'deleted',
             'entity_type' => Workflow::class,
             'entity_id' => $workflow->id,
         ]);
